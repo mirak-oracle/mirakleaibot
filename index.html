@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <title>MirakleAi</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+   <div class="main">
+    <div class="navbar">
+        <div class="icon">
+             
+        </div>
+        
+   </div>
+</body>
+<html>
+<body></body>
+<html>
+<head>
+
+
+</body>
+<iframe src="https://widget.getcody.ai/67c482cd-4fff-489b-b35a-de41e4831fbf" style="border:0px;" name="codyai" scrolling="no" frameborder="1" marginheight="0" marginwidth="0" height="800px" width="100%" allowfullscreen></iframe>
+ 
+
+<head>
+  <title>Task Manager</title>
+  <style>
+    /* Your CSS styles for the task list and headers go here */
+  </style>
+</head>
+<body>
+  <h1>Task Manager</h1>
+
+  <!-- Task input form -->
+  <form id="task-form">
+    <label for="task-name">Task Name:</label>
+    <input type="text" id="task-name" required>
+
+    <label for="due-date">Due Date:</label>
+    <input type="date" id="due-date" required>
+
+    <label for="priority">Priority:</label>
+    <select id="priority" required>
+      <option value="low">Low</option>
+      <option value="medium">Medium</option>
+      <option value="high">High</option>
+    </select>
+
+    <button type="submit">Add Task</button>
+  </form>
+
+  <!-- Task list -->
+  <div id="task-list">
+    <!-- Your tasks will be dynamically added here -->
+  </div>
+
+  <!-- Sorting options -->
+  <label for="sort-by">Sort by:</label>
+  <select id="sort-by" onchange="sortTasks()">
+    <option value="due-date">Due Date</option>
+    <option value="priority">Priority</option>
+    <option value="other-criteria">Other Criteria</option>
+  </select>
+
+  <script>
+    // Array to store tasks
+    let tasks = [];
+
+    // Function to add a new task to the list
+    function addTask(event) {
+      event.preventDefault();
+
+      const taskName = document.getElementById("task-name").value;
+      const dueDate = document.getElementById("due-date").value;
+      const priority = document.getElementById("priority").value;
+
+      tasks.push({ name: taskName, dueDate: dueDate, priority: priority });
+
+      // Clear form fields
+      document.getElementById("task-name").value = "";
+      document.getElementById("due-date").value = "";
+      document.getElementById("priority").value = "low";
+
+      // Refresh the task list
+      displayTasks();
+    }
+
+    // Function to display tasks based on the selected sorting option
+    function displayTasks() {
+      const taskListContainer = document.getElementById("task-list");
+      taskListContainer.innerHTML = "";
+
+      // Sort tasks based on the selected sorting option
+      const sortBy = document.getElementById("sort-by").value;
+      if (sortBy === "due-date") {
+        tasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+      } else if (sortBy === "priority") {
+        tasks.sort((a, b) => {
+          const priorityOrder = { low: 0, medium: 1, high: 2 };
+          return priorityOrder[a.priority] - priorityOrder[b.priority];
+        });
+      } else {
+        // Add your logic here for other sorting criteria
+      }
+
+      // Display the sorted tasks
+      tasks.forEach((task) => {
+        const taskElement = document.createElement("div");
+        taskElement.innerHTML = `<p>${task.name} - Due Date: ${task.dueDate} - Priority: ${task.priority}</p>`;
+        taskListContainer.appendChild(taskElement);
+      });
+    }
+
+    // Function to sort tasks when the sorting option is changed
+    function sortTasks() {
+      displayTasks();
+    }
+
+    // Attach event listener to the task form submission
+    document.getElementById("task-form").addEventListener("submit", addTask);
+
+    // Initial display of tasks on page load
+    displayTasks();
+  </script>
+</body>
+</html>
