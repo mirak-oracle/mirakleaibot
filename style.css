@@ -1,0 +1,42 @@
+/* CSS styles for the chatbot container */
+.chatbot-container {
+    width: 300px;
+    height: 400px;
+    border: 1px solid #ccc;
+    overflow-y: scroll;
+    padding: 10px;
+  }
+  
+  /* CSS styles for the chat messages */
+  .message {
+    margin-bottom: 10px;
+  }
+  
+  .user-message {
+    color: blue;
+  }
+  
+  .bot-message {
+    color: green;
+  }
+  
+  /* CSS styles for the input field and send button */
+  input[type="text"] {
+    width: 240px;
+    padding: 5px;
+    margin-top: 10px;
+  }
+  
+  button {
+    padding: 5px 10px;
+    margin-top: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
