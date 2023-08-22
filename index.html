@@ -67,27 +67,8 @@
   </select>
   
   <ul id="taskList">
-    <?php
-      // Fetch tasks from the database and populate the list
-      $conn = new mysqli("localhost", "username", "password", "task_manager_db");
-      if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-      }
 
-      $sql = "SELECT * FROM tasks ORDER BY due_date";
-      $result = $conn->query($sql);
-
-      while ($row = $result->fetch_assoc()) {
-        echo '<li data-dueDate="' . $row["due_date"] . '" data-priority="' . $row["priority"] . '">';
-        echo '<span>' . $row["task_name"] . '</span>';
-        echo '<span>Due: ' . $row["due_date"] . '</span>';
-        echo '<span>Priority: ' . $row["priority"] . '</span>';
-        echo '</li>';
-      }
-
-      $conn->close();
-    ?>
-  </ul>
+    
   
   <script>
     // JavaScript code for adding tasks and sorting
