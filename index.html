@@ -24,105 +24,129 @@
  
 
 <head>
-  <title>Task Manager</title>
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> Task Manager</title>
   <style>
-    /* Your CSS styles for the task list and headers go here */
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      border: 1px solid #ccc;
+      margin: 5px;
+      padding: 5px;
+      display: flex;
+      justify-content: space-between;
+    }
   </style>
 </head>
 <body>
-  <h1>Task Manager</h1>
-
-  <!-- Task input form -->
-  <form id="task-form">
-    <label for="task-name">Task Name:</label>
-    <input type="text" id="task-name" required>
-
-    <label for="due-date">Due Date:</label>
-    <input type="date" id="due-date" required>
-
-    <label for="priority">Priority:</label>
-    <select id="priority" required>
-      <option value="low">Low</option>
-      <option value="medium">Medium</option>
-      <option value="high">High</option>
-    </select>
-
-    <button type="submit">Add Task</button>
-  </form>
-
-  <!-- Task list -->
-  <div id="task-list">
-    <!-- Your tasks will be dynamically added here -->
-  </div>
-
-  <!-- Sorting options -->
-  <label for="sort-by">Sort by:</label>
-  <select id="sort-by" onchange="sortTasks()">
-    <option value="due-date">Due Date</option>
-    <option value="priority">Priority</option>
-    <option value="other-criteria">Other Criteria</option>
+  <h1> Task Manager</h1>
+  
+  <label for="newTask">New Task:</label>
+  <input type="text" id="newTask" placeholder="Enter task name">
+  <label for="dueDate">Due Date:</label>
+  <input type="date" id="dueDate">
+  <label for="priority">Priority:</label>
+  <select id="priority">
+    <option value="high">High</option>
+    <option value="medium">Medium</option>
+    <option value="low">Low</option>
   </select>
-
-  <script>
-    // Array to store tasks
-    let tasks = [];
-
-    // Function to add a new task to the list
-    function addTask(event) {
-      event.preventDefault();
-
-      const taskName = document.getElementById("task-name").value;
-      const dueDate = document.getElementById("due-date").value;
-      const priority = document.getElementById("priority").value;
-
-      tasks.push({ name: taskName, dueDate: dueDate, priority: priority });
-
-      // Clear form fields
-      document.getElementById("task-name").value = "";
-      document.getElementById("due-date").value = "";
-      document.getElementById("priority").value = "low";
-
-      // Refresh the task list
-      displayTasks();
-    }
-
-    // Function to display tasks based on the selected sorting option
-    function displayTasks() {
-      const taskListContainer = document.getElementById("task-list");
-      taskListContainer.innerHTML = "";
-
-      // Sort tasks based on the selected sorting option
-      const sortBy = document.getElementById("sort-by").value;
-      if (sortBy === "due-date") {
-        tasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-      } else if (sortBy === "priority") {
-        tasks.sort((a, b) => {
-          const priorityOrder = { low: 0, medium: 1, high: 2 };
-          return priorityOrder[a.priority] - priorityOrder[b.priority];
-        });
-      } else {
-        // Add your logic here for other sorting criteria
+  <button id="addTask">Add Task</button>
+  
+  <h2>Tasks</h2>
+  <label for="sortCriteria">Sort by:</label>
+  <select id="sortCriteria">
+    <option value="dueDate">Due Date</option>
+    <option value="priority">Priority</option>
+  </select>
+  
+  <ul id="taskList">
+    <?php
+      // Fetch tasks from the database and populate the list
+      $conn = new mysqli("localhost", "username", "password", "task_manager_db");
+      if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
       }
 
-      // Display the sorted tasks
-      tasks.forEach((task) => {
-        const taskElement = document.createElement("div");
-        taskElement.innerHTML = `<p>${task.name} - Due Date: ${task.dueDate} - Priority: ${task.priority}</p>`;
-        taskListContainer.appendChild(taskElement);
-      });
+      $sql = "SELECT * FROM tasks ORDER BY due_date";
+      $result = $conn->query($sql);
+
+      while ($row = $result->fetch_assoc()) {
+        echo '<li data-dueDate="' . $row["due_date"] . '" data-priority="' . $row["priority"] . '">';
+        echo '<span>' . $row["task_name"] . '</span>';
+        echo '<span>Due: ' . $row["due_date"] . '</span>';
+        echo '<span>Priority: ' . $row["priority"] . '</span>';
+        echo '</li>';
+      }
+
+      $conn->close();
+    ?>
+  </ul>
+  
+  <script>
+    // JavaScript code for adding tasks and sorting
+    const taskList = document.getElementById("taskList");
+    const addTaskButton = document.getElementById("addTask");
+    const newTaskInput = document.getElementById("newTask");
+    const dueDateInput = document.getElementById("dueDate");
+    const priorityInput = document.getElementById("priority");
+    const sortCriteriaInput = document.getElementById("sortCriteria");
+
+    addTaskButton.addEventListener("click", addTask);
+
+    function addTask() {
+      const taskName = newTaskInput.value;
+      const dueDate = dueDateInput.value;
+      const priority = priorityInput.value;
+
+      if (taskName.trim() === "" || dueDate === "" || priority === "") {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      // Save task to the database (using AJAX or fetch)
+      // ...
+
+      const taskItem = document.createElement("li");
+      taskItem.innerHTML = `
+        <span>${taskName}</span>
+        <span>Due: ${dueDate}</span>
+        <span>Priority: ${priority}</span>
+      `;
+
+      taskList.appendChild(taskItem);
+      newTaskInput.value = "";
+      dueDateInput.value = "";
+      priorityInput.value = "";
+
+      sortTasks();
     }
 
-    // Function to sort tasks when the sorting option is changed
     function sortTasks() {
-      displayTasks();
+      const criteria = sortCriteriaInput.value;
+      const tasks = Array.from(taskList.children);
+
+      tasks.sort((a, b) => {
+        const aValue = a.getAttribute(`data-${criteria}`);
+        const bValue = b.getAttribute(`data-${criteria}`);
+        return aValue.localeCompare(bValue);
+      });
+
+      taskList.innerHTML = "";
+      tasks.forEach(task => taskList.appendChild(task));
     }
 
-    // Attach event listener to the task form submission
-    document.getElementById("task-form").addEventListener("submit", addTask);
-
-    // Initial display of tasks on page load
-    displayTasks();
+    sortCriteriaInput.addEventListener("change", sortTasks);
   </script>
+</body>
+</html>
+
 </body>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2350738308188156"
      crossorigin="anonymous"></script> 
