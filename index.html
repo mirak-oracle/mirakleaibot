@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+7<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>MirakleAi</title>
@@ -53,4 +53,126 @@
 </body>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2350738308188156"
      crossorigin="anonymous"></script> 
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <div class="chatbot">
+        <div class="chat-window">
+            <div class="chat-header">
+                <h3>ChatGPT Chatbot</h3>
+            </div>
+            <div class="chat-body" id="chat-body">
+                <!-- Chat messages will be displayed here -->
+            </div>
+            <div class="chat-input">
+                <input type="text" id="user-input" placeholder="Type your message...">
+                <button id="send-button">Send</button>
+            </div>
+        </div>
+        <div class="search-queries">
+            <h3>Search Queries:</h3>
+            <ul id="query-list">
+                <!-- Saved search queries will be displayed here -->
+            </ul>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.chatbot {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.chat-window {
+    width: 70%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.chat-header {
+    background-color: #0074d9;
+    color: #fff;
+    padding: 10px;
+}
+
+.chat-body {
+    padding: 10px;
+    height: 200px;
+    overflow-y: scroll;
+}
+
+.chat-input {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+button {
+    padding: 5px 10px;
+    background-color: #0074d9;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.search-queries {
+    width: 28%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+#query-list {
+    list-style: none;
+    padding: 0;
+}
+
+#query-list li {
+    margin-bottom: 5px;
+}
+
+/* Add more CSS styles as needed */
+document.addEventListener("DOMContentLoaded", function () {
+    const chatBody = document.getElementById("chat-body");
+    const userInput = document.getElementById("user-input");
+    const sendButton = document.getElementById("send-button");
+    const queryList = document.getElementById("query-list");
+
+    sendButton.addEventListener("click", function () {
+        const userMessage = userInput.value;
+        if (userMessage) {
+            // Display user message in the chat window
+            chatBody.innerHTML += `<p>User: ${userMessage}</p>`;
+            
+            // Save the search query
+            queryList.innerHTML += `<li>${userMessage}</li>`;
+            userInput.value = ""; // Clear the input field
+        }
+    });
+});
+
 
