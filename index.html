@@ -3,28 +3,261 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MirakleAi</title>
+    <meta name="description" content="MirakleAi - Your Intelligent Assistant">
+    <meta name="theme-color" content="#2d3748">
+    <title>MirakleAi | Intelligent Assistant</title>
+    
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZY9S9E5VGC"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZY9S9E5VGC"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-ZY9S9E5VGC');
+    </script>
 
-  gtag('config', 'G-ZY9S9E5VGC');
-</script>
-    <link rel="stylesheet" href="style.css">
-    
-    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <style>
+        :root {
+            --primary-color: #2d3748;
+            --secondary-color: #4a5568;
+            --accent-color: #667eea;
+            --text-color: #e2e8f0;
+            --background-color: #1a202c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        .main {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background-color: var(--primary-color);
+            padding: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .chat-container {
+            flex: 1;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            width: 100%;
+        }
+
+        .chat-wrapper {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-header {
+            background-color: var(--primary-color);
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #48bb78;
+            border-radius: 50%;
+        }
+
+        .chat-iframe {
+            width: 100%;
+            height: 700px;
+            border: none;
+        }
+
+        .footer {
+            background-color: var(--primary-color);
+            padding: 1.5rem;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .chat-container {
+                margin: 1rem auto;
+            }
+
+            .chat-iframe {
+                height: 600px;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            padding: 0.5rem;
+        }
     </style>
 </head>
 <body>
-   <div class="main">
-    <div class="navbar">
-        <div class="icon">
-              <iframe src="https://widget.getcody.ai/67c482cd-4fff-489b-b35a-de41e4831fbf" style="border:0px;" name="MirakleAi" scrolling="no" frameborder="1" marginheight="0" marginwidth="0" height="800px" width="100%" allowfullscreen></iframe>
-        </div>
-    </div>
-</div>
+    <div class="main">
+        <nav class="navbar">
+            <div class="header">
+                <div class="logo">MirakleAi</div>
+                <div class="nav-links">
+                    <a href="#features">Features</a>
+                    <a href="#about">About</a>
+                    <a href="#contact">Contact</a>
+                </div>
+                <button class="theme-toggle" id="themeToggle">🌓</button>
+            </div>
+        </nav>
 
-</html>
+        <div class="chat-container">
+            <div class="chat-wrapper">
+                <div class="chat-header">
+                    <h2>AI Assistant</h2>
+                    <div class="status-indicator">
+                        <div class="status-dot"></div>
+                        <span>Online</span>
+                    </div>
+                </div>
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                </div>
+                <iframe 
+                    src="https://widget.getcody.ai/67c482cd-4fff-489b-b35a-de41e4831fbf" 
+                    name="MirakleAi" 
+                    class="chat-iframe"
+                    id="chatIframe"
+                    allowfullscreen
+                ></iframe>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>&copy; 2024 MirakleAi. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Theme Toggle Functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const root = document.documentElement;
+        
+        themeToggle.addEventListener('click', () => {
+            const isDark = root.style.getPropertyValue('--background-color') === '#1a202c';
+            
+            if (isDark) {
+                root.style.setProperty('--background-color', '#f7fafc');
+                root.style.setProperty('--text-color', '#2d3748');
+                root.style.setProperty('--primary-color', '#fff');
+                root.style.setProperty('--secondary-color', '#edf2f7');
+            } else {
+                root.style.setProperty('--background-color', '#1a202c');
+                root.style.setProperty('--text-color', '#e2e8f0');
+                root.style.setProperty('--primary-color', '#2d3748');
+                root.style.setProperty('--secondary-color', '#4a5568');
+            }
+        });
+
+        // Iframe Loading Handler
+        const iframe = document.getElementById('chatIframe');
+        const loading = document.getElementById('loading');
+
+        iframe.addEventListener('load', () => {
+            loading.classList.remove('active');
+        });
+
+        // Error Handler
+        iframe.addEventListener('error', () => {
+            console.error('Error loading chat widget');
+            // Implement error handling UI
+        });
+
+        // Responsive Height Adjustment
+        function adjustIframeHeight() {
+            const windowHeight = window.innerHeight;
+            const navHeight = document.querySelector('.navbar').offsetHeight;
+            const footerHeight = document.querySelector('.footer').offsetHeight;
+            const chatHeaderHeight = document.querySelector('.chat-header').offsetHeight;
+            
+            const availableHeight = windowHeight - navHeight - footerHeight - chatHeaderHeight - 80; // 80px for margins
+            iframe.style.height = `${availableHeight}px`;
+        }
+
+        window.addEventListener('resize', adjustIframeHeight);
+        adjustIframeHeight();
+    </script>
+</body>
+    </html>
