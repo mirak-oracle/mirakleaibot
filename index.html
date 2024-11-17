@@ -50,9 +50,6 @@
             background-color: var(--primary-color);
             padding: 1rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 10;
         }
 
         .header {
@@ -68,37 +65,21 @@
             font-size: 1.5rem;
             font-weight: bold;
             color: var(--accent-color);
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         .nav-links {
             display: flex;
-            gap: 1.5rem;
+            gap: 2rem;
         }
 
         .nav-links a {
             color: var(--text-color);
             text-decoration: none;
             transition: color 0.3s ease;
-            font-weight: 500;
         }
 
         .nav-links a:hover {
             color: var(--accent-color);
-        }
-
-        .theme-toggle {
-            background: none;
-            border: none;
-            color: var(--text-color);
-            cursor: pointer;
-            padding: 0.5rem;
-            transition: transform 0.3s ease;
-        }
-
-        .theme-toggle:hover {
-            transform: rotate(20deg);
         }
 
         .chat-container {
@@ -106,16 +87,14 @@
             max-width: 1200px;
             margin: 2rem auto;
             padding: 0 1rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            width: 100%;
         }
 
         .chat-wrapper {
-            background: linear-gradient(145deg, rgba(40, 44, 52, 0.8), rgba(30, 36, 42, 0.9));
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
         .chat-header {
@@ -137,50 +116,22 @@
             height: 8px;
             background-color: #48bb78;
             border-radius: 50%;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.5);
-            }
         }
 
         .chat-iframe {
             width: 100%;
-            height: calc(100vh - 280px);
+            height: 700px;
             border: none;
         }
 
         .footer {
             background-color: var(--primary-color);
-            padding: 1rem;
+            padding: 1.5rem;
             text-align: center;
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 1rem;
+            margin-top: auto;
         }
 
-        .footer a {
-            color: var(--accent-color);
-            text-decoration: none;
-        }
-
-        .footer a:hover {
-            text-decoration: underline;
-        }
-
-        .footer-icons img {
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-        }
-
+        /* Responsive Design */
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
@@ -189,6 +140,32 @@
             .chat-container {
                 margin: 1rem auto;
             }
+
+            .chat-iframe {
+                height: 600px;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            padding: 0.5rem;
         }
     </style>
 </head>
@@ -215,6 +192,9 @@
                         <span>Online</span>
                     </div>
                 </div>
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                </div>
                 <iframe 
                     src="https://widget.getcody.ai/67c482cd-4fff-489b-b35a-de41e4831fbf" 
                     name="MirakleAi" 
@@ -226,35 +206,58 @@
         </div>
 
         <footer class="footer">
-            <p>&copy; 2024 MirakleAi</p>
-            <div class="footer-icons">
-                <a href="https://twitter.com"><img src="icons/twitter.svg" alt="Twitter"></a>
-                <a href="https://facebook.com"><img src="icons/facebook.svg" alt="Facebook"></a>
-                <a href="https://linkedin.com"><img src="icons/linkedin.svg" alt="LinkedIn"></a>
-            </div>
+            <p>&copy; MirakleAi Chatbot, Makes Mistakes Check Response .</p>
         </footer>
     </div>
 
     <script>
+        // Theme Toggle Functionality
         const themeToggle = document.getElementById('themeToggle');
         const root = document.documentElement;
-
+        
         themeToggle.addEventListener('click', () => {
-            const isDark = getComputedStyle(root).getPropertyValue('--background-color').trim() === '#1a202c';
+            const isDark = root.style.getPropertyValue('--background-color') === '#1a202c';
+            
             if (isDark) {
                 root.style.setProperty('--background-color', '#f7fafc');
                 root.style.setProperty('--text-color', '#2d3748');
                 root.style.setProperty('--primary-color', '#fff');
+                root.style.setProperty('--secondary-color', '#edf2f7');
             } else {
                 root.style.setProperty('--background-color', '#1a202c');
                 root.style.setProperty('--text-color', '#e2e8f0');
                 root.style.setProperty('--primary-color', '#2d3748');
+                root.style.setProperty('--secondary-color', '#4a5568');
             }
         });
 
-        window.addEventListener('resize', () => {
-            document.querySelector('.chat-iframe').style.height = `${window.innerHeight - 280}px`;
+        // Iframe Loading Handler
+        const iframe = document.getElementById('chatIframe');
+        const loading = document.getElementById('loading');
+
+        iframe.addEventListener('load', () => {
+            loading.classList.remove('active');
         });
+
+        // Error Handler
+        iframe.addEventListener('error', () => {
+            console.error('Error loading chat widget');
+            // Implement error handling UI
+        });
+
+        // Responsive Height Adjustment
+        function adjustIframeHeight() {
+            const windowHeight = window.innerHeight;
+            const navHeight = document.querySelector('.navbar').offsetHeight;
+            const footerHeight = document.querySelector('.footer').offsetHeight;
+            const chatHeaderHeight = document.querySelector('.chat-header').offsetHeight;
+            
+            const availableHeight = windowHeight - navHeight - footerHeight - chatHeaderHeight - 80; // 80px for margins
+            iframe.style.height = `${availableHeight}px`;
+        }
+
+        window.addEventListener('resize', adjustIframeHeight);
+        adjustIframeHeight();
     </script>
 </body>
-</html>
+    </html>
