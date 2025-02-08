@@ -19,245 +19,158 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/favicon.png">
 
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <style>
-        :root {
-            --primary-color: #2d3748;
-            --secondary-color: #4a5568;
-            --accent-color: #667eea;
-            --text-color: #e2e8f0;
-            --background-color: #1a202c;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-        }
-
-        body {
-            background-color: var(--background-color);
-            color: var(--text-color);
-        }
-
-        .main {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .navbar {
-            background-color: var(--primary-color);
-            padding: 1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--accent-color);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: var(--text-color);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--accent-color);
-        }
-
-        .chat-container {
-            flex: 1;
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-            width: 100%;
-        }
-
-        .chat-wrapper {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-
-        .chat-header {
-            background-color: var(--primary-color);
-            padding: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .status-indicator {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
 
         .status-dot {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        .theme-transition {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Custom scrollbar styles */
+        ::-webkit-scrollbar {
             width: 8px;
-            height: 8px;
-            background-color: #48bb78;
-            border-radius: 50%;
         }
 
-        .chat-iframe {
-            width: 100%;
-            height: 700px;
-            border: none;
+        ::-webkit-scrollbar-track {
+            background: #2d3748;
         }
 
-        .footer {
-            background-color: var(--primary-color);
-            padding: 1.5rem;
-            text-align: center;
-            margin-top: auto;
+        ::-webkit-scrollbar-thumb {
+            background: #4a5568;
+            border-radius: 4px;
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .chat-container {
-                margin: 1rem auto;
-            }
-
-            .chat-iframe {
-                height: 600px;
-            }
-        }
-
-        /* Loading Animation */
-        .loading {
-            display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .loading.active {
-            display: block;
-        }
-
-        /* Theme Toggle */
-        .theme-toggle {
-            background: none;
-            border: none;
-            color: var(--text-color);
-            cursor: pointer;
-            padding: 0.5rem;
+        ::-webkit-scrollbar-thumb:hover {
+            background: #718096;
         }
     </style>
 </head>
-<body>
-    <div class="main">
-        <nav class="navbar">
-            <div class="header">
-                <div class="logo">MirakleAi</div>
-                <div class="nav-links">
-                    <a href="#features">Features</a>
-                    <a href="#about">About</a>
-                    <a href="#contact">Contact</a>
+<body class="bg-gray-900 text-gray-100 font-sans theme-transition">
+    <div class="flex flex-col min-h-screen">
+        <nav class="bg-gray-800 shadow-lg">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <a href="#" class="text-xl font-bold text-indigo-500">MirakleAi</a>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-4">
+                        <a href="#features" class="text-gray-300 hover:text-white transition duration-150 ease-in-out">Features</a>
+                        <a href="#about" class="text-gray-300 hover:text-white transition duration-150 ease-in-out">About</a>
+                        <a href="#contact" class="text-gray-300 hover:text-white transition duration-150 ease-in-out">Contact</a>
+                        <button id="themeToggle" class="text-gray-300 hover:text-white transition duration-150 ease-in-out">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="md:hidden flex items-center">
+                        <button id="mobileMenuButton" class="text-gray-300 hover:text-white focus:outline-none focus:text-white">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
-                <button class="theme-toggle" id="themeToggle">🌓</button>
+            </div>
+            <div id="mobileMenu" class="hidden md:hidden">
+                <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                    <a href="#features" class="block text-gray-300 hover:text-white transition duration-150 ease-in-out">Features</a>
+                    <a href="#about" class="block text-gray-300 hover:text-white transition duration-150 ease-in-out">About</a>
+                    <a href="#contact" class="block text-gray-300 hover:text-white transition duration-150 ease-in-out">Contact</a>
+                </div>
             </div>
         </nav>
 
-        <div class="chat-container">
-            <div class="chat-wrapper">
-                <div class="chat-header">
-                    <h2>AI Assistant</h2>
-                    <div class="status-indicator">
-                        <div class="status-dot"></div>
-                        <span>Online</span>
+        <main class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="bg-gray-800 rounded-lg shadow-xl overflow-hidden">
+                <div class="p-4 bg-gray-700 flex justify-between items-center">
+                    <h2 class="text-xl font-semibold">AI Assistant</h2>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-2 h-2 bg-green-500 rounded-full status-dot"></div>
+                        <span class="text-sm text-gray-300">Online</span>
                     </div>
                 </div>
-                <div class="loading" id="loading">
-                    <div class="spinner"></div>
+                <div id="loading" class="hidden absolute inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+                    <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
                 </div>
                 <iframe 
                     src="https://widget.getcody.ai/67c482cd-4fff-489b-b35a-de41e4831fbf" 
                     name="MirakleAi" 
-                    class="chat-iframe"
                     id="chatIframe"
+                    class="w-full h-[600px] border-none"
                     allowfullscreen
                 ></iframe>
             </div>
-        </div>
+        </main>
 
-        <footer class="footer">
-            <p>&copy; MirakleAi Chatbot, Makes Mistakes Check Response .</p>
+        <footer class="bg-gray-800 py-4">
+            <div class="container mx-auto px-4 text-center text-gray-400">
+                <p>&copy; 2023 MirakleAi Chatbot. AI may make mistakes, please verify responses.</p>
+            </div>
         </footer>
     </div>
 
     <script>
-        // Theme Toggle Functionality
-        const themeToggle = document.getElementById('themeToggle');
-        const root = document.documentElement;
-        
-        themeToggle.addEventListener('click', () => {
-            const isDark = root.style.getPropertyValue('--background-color') === '#1a202c';
-            
-            if (isDark) {
-                root.style.setProperty('--background-color', '#f7fafc');
-                root.style.setProperty('--text-color', '#2d3748');
-                root.style.setProperty('--primary-color', '#fff');
-                root.style.setProperty('--secondary-color', '#edf2f7');
-            } else {
-                root.style.setProperty('--background-color', '#1a202c');
-                root.style.setProperty('--text-color', '#e2e8f0');
-                root.style.setProperty('--primary-color', '#2d3748');
-                root.style.setProperty('--secondary-color', '#4a5568');
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('themeToggle');
+            const mobileMenuButton = document.getElementById('mobileMenuButton');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const iframe = document.getElementById('chatIframe');
+            const loading = document.getElementById('loading');
+
+            // Theme toggle functionality
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark');
+                document.body.classList.toggle('bg-gray-900');
+                document.body.classList.toggle('bg-gray-100');
+                document.body.classList.toggle('text-gray-100');
+                document.body.classList.toggle('text-gray-900');
+            });
+
+            // Mobile menu toggle
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Iframe loading handler
+            iframe.addEventListener('load', () => {
+                loading.classList.add('hidden');
+            });
+
+            // Error handler
+            iframe.addEventListener('error', () => {
+                console.error('Error loading chat widget');
+                loading.classList.add('hidden');
+                // Implement error handling UI here
+            });
+
+            // Responsive height adjustment
+            function adjustIframeHeight() {
+                const windowHeight = window.innerHeight;
+                const navHeight = document.querySelector('nav').offsetHeight;
+                const footerHeight = document.querySelector('footer').offsetHeight;
+                const chatHeaderHeight = document.querySelector('.bg-gray-700').offsetHeight;
+                
+                const availableHeight = windowHeight - navHeight - footerHeight - chatHeaderHeight - 64; // 64px for margins
+                iframe.style.height = `${availableHeight}px`;
             }
+
+            window.addEventListener('resize', adjustIframeHeight);
+            adjustIframeHeight();
+
+            // Show loading animation when iframe starts loading
+            loading.classList.remove('hidden');
         });
-
-        // Iframe Loading Handler
-        const iframe = document.getElementById('chatIframe');
-        const loading = document.getElementById('loading');
-
-        iframe.addEventListener('load', () => {
-            loading.classList.remove('active');
-        });
-
-        // Error Handler
-        iframe.addEventListener('error', () => {
-            console.error('Error loading chat widget');
-            // Implement error handling UI
-        });
-
-        // Responsive Height Adjustment
-        function adjustIframeHeight() {
-            const windowHeight = window.innerHeight;
-            const navHeight = document.querySelector('.navbar').offsetHeight;
-            const footerHeight = document.querySelector('.footer').offsetHeight;
-            const chatHeaderHeight = document.querySelector('.chat-header').offsetHeight;
-            
-            const availableHeight = windowHeight - navHeight - footerHeight - chatHeaderHeight - 80; // 80px for margins
-            iframe.style.height = `${availableHeight}px`;
-        }
-
-        window.addEventListener('resize', adjustIframeHeight);
-        adjustIframeHeight();
     </script>
 </body>
-    </html>
+</html>
